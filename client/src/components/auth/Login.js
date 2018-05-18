@@ -11,6 +11,12 @@ class Login extends Component {
     errors: {}
   };
 
+  componentDidMount() {
+    if (this.props.auth.isAuthenticated) {
+      this.props.history.push('/dashboard');
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push('/dashboard');
@@ -48,16 +54,16 @@ class Login extends Component {
                   <input
                     type="email"
                     className={classnames('form-control form-control-lg', {
-                      'is-invalid': errors.name
+                      'is-invalid': errors.email
                     })}
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
                     onChange={this.onChangeHandler}
                   />
-                  {errors.email ? (
+                  {errors.email && (
                     <div className="invalid-feedback">{errors.email}</div>
-                  ) : null}
+                  )}
                 </div>
                 <div className="form-group">
                   <input
@@ -70,9 +76,9 @@ class Login extends Component {
                     value={this.state.password}
                     onChange={this.onChangeHandler}
                   />
-                  {errors.password ? (
+                  {errors.password && (
                     <div className="invalid-feedback">{errors.password}</div>
-                  ) : null}
+                  )}
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
@@ -95,4 +101,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(null, { loginUser })(Login);
+export default connect(mapStateToProps, { loginUser })(Login);
