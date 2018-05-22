@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../../store/actions/authActions';
 import classnames from 'classnames';
+import { loginUser } from '../../store/actions/authActions';
 
 class Login extends Component {
   state = {
@@ -27,14 +27,19 @@ class Login extends Component {
     }
   }
 
-  onChangeHandler = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
   onSubmit = event => {
     event.preventDefault();
-    const { email, password } = this.state;
-    this.props.loginUser(email, password);
+
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+
+    this.props.loginUser(userData);
+  };
+
+  onChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   render() {
@@ -59,7 +64,7 @@ class Login extends Component {
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
-                    onChange={this.onChangeHandler}
+                    onChange={this.onChange}
                   />
                   {errors.email && (
                     <div className="invalid-feedback">{errors.email}</div>
@@ -74,7 +79,7 @@ class Login extends Component {
                     placeholder="Password"
                     name="password"
                     value={this.state.password}
-                    onChange={this.onChangeHandler}
+                    onChange={this.onChange}
                   />
                   {errors.password && (
                     <div className="invalid-feedback">{errors.password}</div>
