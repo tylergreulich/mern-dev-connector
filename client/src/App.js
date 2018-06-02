@@ -12,7 +12,8 @@ import setAuthToken from './helpers/setAuthToken';
 import { setCurrentUser, logoutUser } from './store/actions/authActions';
 import { clearCurrentProfile } from './store/actions/profileActions';
 
-import { BrowserRouter, Route } from 'react-router-dom';
+import PrivateRoute from './components/common/PrivateRoute';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CLEAR_CURRENT_PROFILE } from './store/actions/types';
 
@@ -39,7 +40,9 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <Route exact path="/dashboard" component={Dashboard} />
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
             </div>
             <Footer />
           </div>
