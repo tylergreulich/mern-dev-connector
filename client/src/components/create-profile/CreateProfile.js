@@ -5,6 +5,8 @@ import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import InputGroup from '../common/InputGroup';
 import SelectListGroup from '../common/SelectListGroup';
+import { createProfile } from '../../store/actions/profileActions';
+import { withRouter } from 'react-router-dom';
 
 class CreateProfile extends Component {
   state = {
@@ -25,13 +27,34 @@ class CreateProfile extends Component {
     errors: {}
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmitHandler = event => {
     event.preventDefault();
-    console.log('Submit');
+    const profileData = {
+      handle: this.state.handle,
+      company: this.state.company,
+      website: this.state.website,
+      location: this.state.location,
+      status: this.state.status,
+      skills: this.state.skills,
+      githubusername: this.state.githubusername,
+      bio: this.state.bio,
+      twitter: this.state.twitter,
+      facebook: this.state.facebook,
+      linkedin: this.state.linkedin,
+      youtube: this.state.youtube,
+      instagram: this.state.instagram
+    };
+
+    this.props.createProfile(profileData, this.props.history);
   };
 
   onChangeHandler = event => {
-    event.preventDefault();
     this.setState({ [event.target.name]: event.target.value });
   };
 
@@ -45,7 +68,7 @@ class CreateProfile extends Component {
         <div>
           <InputGroup
             placeholder="Twitter Profile URL"
-            name="Twitter"
+            name="twitter"
             icon="fab fa-twitter"
             value={this.state.twitter}
             onChange={this.onChangeHandler}
@@ -53,7 +76,7 @@ class CreateProfile extends Component {
           />
           <InputGroup
             placeholder="Facebook Profile URL"
-            name="Facebook"
+            name="facebook"
             icon="fab fa-facebook"
             value={this.state.facebook}
             onChange={this.onChangeHandler}
@@ -61,7 +84,7 @@ class CreateProfile extends Component {
           />
           <InputGroup
             placeholder="LinkedIn Profile URL"
-            name="LinkedIn"
+            name="linkedIn"
             icon="fab fa-linkedin"
             value={this.state.linkedin}
             onChange={this.onChangeHandler}
@@ -69,7 +92,7 @@ class CreateProfile extends Component {
           />
           <InputGroup
             placeholder="YouTube Profile URL"
-            name="YouTube"
+            name="youTube"
             icon="fab fa-youtube"
             value={this.state.youtube}
             onChange={this.onChangeHandler}
@@ -77,7 +100,7 @@ class CreateProfile extends Component {
           />
           <InputGroup
             placeholder="Instagram Profile URL"
-            name="Instagram"
+            name="instagram"
             icon="fab fa-instagram"
             value={this.state.instagram}
             onChange={this.onChangeHandler}
@@ -111,7 +134,7 @@ class CreateProfile extends Component {
             <form onSubmit={this.onSubmitHandler}>
               <TextFieldGroup
                 placeholder="* Profile Handle"
-                name="Handle"
+                name="handle"
                 value={this.state.handle}
                 onChange={this.onChangeHandler}
                 error={errors.handle}
@@ -119,7 +142,7 @@ class CreateProfile extends Component {
               />
               <SelectListGroup
                 placeholder="Status"
-                name="Status"
+                name="status"
                 value={this.state.status}
                 onChange={this.onChangeHandler}
                 error={errors.status}
@@ -128,7 +151,7 @@ class CreateProfile extends Component {
               />
               <TextFieldGroup
                 placeholder="Company"
-                name="Company"
+                name="company"
                 value={this.state.company}
                 onChange={this.onChangeHandler}
                 error={errors.company}
@@ -136,7 +159,7 @@ class CreateProfile extends Component {
               />
               <TextFieldGroup
                 placeholder="Website"
-                name="Website"
+                name="website"
                 value={this.state.website}
                 onChange={this.onChangeHandler}
                 error={errors.website}
@@ -144,7 +167,7 @@ class CreateProfile extends Component {
               />
               <TextFieldGroup
                 placeholder="Location"
-                name="Location"
+                name="location"
                 value={this.state.location}
                 onChange={this.onChangeHandler}
                 error={errors.location}
@@ -152,7 +175,7 @@ class CreateProfile extends Component {
               />
               <TextFieldGroup
                 placeholder="Skills"
-                name="Skills"
+                name="skills"
                 value={this.state.skills}
                 onChange={this.onChangeHandler}
                 error={errors.skills}
@@ -160,7 +183,7 @@ class CreateProfile extends Component {
               />
               <TextFieldGroup
                 placeholder="Github username"
-                name="Github username"
+                name="github username"
                 value={this.state.githubusername}
                 onChange={this.onChangeHandler}
                 error={errors.githubusername}
@@ -168,7 +191,7 @@ class CreateProfile extends Component {
               />
               <TextAreaFieldGroup
                 placeholder="Short bio"
-                name="Short bio"
+                name="short bio"
                 value={this.state.bio}
                 onChange={this.onChangeHandler}
                 error={errors.bio}
@@ -177,6 +200,7 @@ class CreateProfile extends Component {
 
               <div className="mb-3">
                 <button
+                  type="button"
                   className="btn btn-light"
                   onClick={() => {
                     this.setState(prevState => ({
@@ -191,7 +215,7 @@ class CreateProfile extends Component {
               {socialInputs}
               <input
                 type="submit"
-                value="submit"
+                value="Submit"
                 className="btn btn-info btn-block mt-4"
               />
             </form>
@@ -212,4 +236,6 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
-export default connect(mapStateToProps, null)(CreateProfile);
+export default connect(mapStateToProps, { createProfile })(
+  withRouter(CreateProfile)
+);
