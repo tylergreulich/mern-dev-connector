@@ -28,6 +28,6 @@ export const setProfileLoading = () => {
   return { type: PROFILE_LOADING };
 };
 
-export const clearProfile = () => {
+export const clearCurrentProfile = () => {
   return { type: CLEAR_CURRENT_PROFILE };
 };
