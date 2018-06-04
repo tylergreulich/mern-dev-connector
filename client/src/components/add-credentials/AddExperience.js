@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { addExperience } from '../../store/actions/profileActions';
 
 class AddExperience extends Component {
   state = {
@@ -18,8 +19,26 @@ class AddExperience extends Component {
     disabled: false
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmitHandler = event => {
     event.preventDefault();
+
+    const expData = {
+      company: this.state.company,
+      title: this.state.title,
+      location: this.state.location,
+      from: this.state.from,
+      to: this.state.to,
+      current: this.state.current,
+      description: this.state.description
+    };
+
+    this.props.addExperience(expData, this.props.history);
   };
 
   onChangeHandler = event => {
@@ -29,8 +48,8 @@ class AddExperience extends Component {
   onCheckHandler = event => {
     this.setState(prevState => {
       return {
-        disabled: !prevState.disabled,
-        current: !prevState.disabled
+        current: !prevState.current,
+        disabled: !prevState.disabled
       };
     });
   };
@@ -44,8 +63,8 @@ class AddExperience extends Component {
       to,
       current,
       description,
-      errors,
-      disabled
+      disabled,
+      errors
     } = this.state;
 
     return (
@@ -57,13 +76,13 @@ class AddExperience extends Component {
                 Go Back
               </Link>
               <h1 className="display-4 text-center">Add Experience</h1>
-              <p className="text-lead text-center">
+              <p className="lead text-center">
                 Add any job or position that you have had in the past or current
               </p>
               <small className="d-block pb-3">* = required fields</small>
               <form onSubmit={this.onSubmitHandler}>
                 <TextFieldGroup
-                  placeholder="Company"
+                  placeholder="* Company"
                   name="company"
                   value={company}
                   onChange={this.onChangeHandler}
@@ -114,13 +133,13 @@ class AddExperience extends Component {
                     Current Job
                   </label>
                 </div>
-                <TextFieldGroup
+                <TextAreaFieldGroup
                   placeholder="Job Description"
                   name="description"
                   value={description}
                   onChange={this.onChangeHandler}
                   error={errors.description}
-                  info="Tell us about the position"
+                  info="Tell us about the the position"
                 />
                 <input
                   type="submit"
@@ -137,13 +156,16 @@ class AddExperience extends Component {
 }
 
 AddExperience.propTypes = {
-  auth: PropTypes.object.isRequired,
-  profile: PropTypes.object.isRequired
+  addExperience: PropTypes.func.isRequired,
+  profile: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
-  profile: state.profile
+  profile: state.profile,
+  errors: state.errors
 });
 
-export default connect(mapStateToProps, null)(withRouter(AddExperience));
+export default connect(mapStateToProps, { addExperience })(
+  withRouter(AddExperience)
+);
