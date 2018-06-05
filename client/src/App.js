@@ -10,6 +10,7 @@ import CreateProfile from './components/create-profile/CreateProfile';
 import EditProfile from './components/edit-profile/EditProfile';
 import AddExperience from './components/add-credentials/AddExperience';
 import AddEducation from './components/add-credentials/AddEducation';
+import Profiles from './components/profiles/Profiles';
 import store from './store/store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './helpers/setAuthToken';
@@ -19,7 +20,6 @@ import { clearCurrentProfile } from './store/actions/profileActions';
 import PrivateRoute from './components/common/PrivateRoute';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { CLEAR_CURRENT_PROFILE } from './store/actions/types';
 
 if (localStorage.jwtToken) {
   setAuthToken(localStorage.jwtToken);
@@ -44,6 +44,7 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/profiles" component={Profiles} />
               <Switch>
                 <PrivateRoute exact path="/dashboard" component={Dashboard} />
               </Switch>

@@ -3,7 +3,8 @@ import {
   PROFILE_LOADING,
   GET_ERRORS,
   SET_CURRENT_USER,
-  CLEAR_CURRENT_PROFILE
+  CLEAR_CURRENT_PROFILE,
+  GET_PROFILES
 } from './types';
 import axios from 'axios';
 
@@ -32,6 +33,24 @@ export const createProfile = (profileData, history) => dispatch => {
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
+        payload: err.response.data
+      })
+    );
+};
+
+export const getProfiles = () => dispatch => {
+  dispatch(setProfileLoading());
+  axios
+    .get('/api/profile/all')
+    .then(res =>
+      dispatch({
+        type: GET_PROFILES,
+        payload: res.data
+      })
+    )
+    .catch(err =>
+      dispatch({
+        type: GET_PROFILES,
         payload: err.response.data
       })
     );
