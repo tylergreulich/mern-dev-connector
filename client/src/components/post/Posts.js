@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import PostForm from './PostForm';
 import Spinner from '../common/Spinner';
+import CommentForm from './CommonForm';
 import { getPosts } from '../../store/actions/postActions';
 import PostFeed from './PostFeed';
 
@@ -18,7 +19,12 @@ class Post extends Component {
     if (posts === null || loading) {
       postContent = <Spinner />;
     } else {
-      postContent = <PostFeed posts={posts} />;
+      postContent = (
+        <div>
+          <PostFeed posts={posts} />;
+          <CommentForm postId={post.id} />
+        </div>
+      );
     }
 
     return (
