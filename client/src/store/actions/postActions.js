@@ -59,6 +59,13 @@ export const addComment = (postId, newComment) => dispatch => {
     .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
 };
 
+export default (getPost = postId => dispatch => {
+  axios
+    .get(`/post/${postId}`)
+    .then(res => dispatch({ type: GET_POST, payload: res.data }))
+    .catch(err => dispatch({ type: GET_ERRORS, payload: err.response.data }));
+});
+
 export const setPostLoading = () => {
   return {
     type: POST_LOADING
